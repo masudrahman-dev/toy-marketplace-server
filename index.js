@@ -6,7 +6,7 @@ require("dotenv").config();
 
 const bodyParser = require("body-parser");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.use(cors());
 
 // parse application/x-www-form-urlencoded
@@ -41,7 +41,10 @@ async function run() {
       const result = await DBCollection.insertOne(products);
       console.log(result);
     });
-
+    app.get("/products", async (req, res) => {
+      const products = await DBCollection.find({}).toArray();
+      res.send(products);
+    });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
