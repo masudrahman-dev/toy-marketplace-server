@@ -64,6 +64,13 @@ async function run() {
       const products = await DBCollection.find(query).toArray();
       res.send(products);
     });
+    app.get("/users/:id", async (req, res) => {
+      const email = req.params.id;
+      console.log('email :>> ', email);
+      const query = { seller_email: email };
+      const products = await DBCollection.find(query).toArray();
+      res.send(products);
+    });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
