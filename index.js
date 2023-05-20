@@ -41,6 +41,30 @@ async function run() {
       const result = await DBCollection.insertOne(products);
       console.log(result);
     });
+
+    app.patch("/my_toys/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const updatedData = await req.body;
+      const updatedDoc = {
+        $set: updatedData,
+      };
+      const result = await DBCollection.updateOne(query, updatedDoc);
+      // console.log(result);
+      res.send(updatedData);
+    });
+    app.delete("/my_toys/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        const result = await DBCollection.deleteOne(query);
+        console.log(id);
+        res.send(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+      }
+    });
     app.get("/products", async (req, res) => {
       const products = await DBCollection.find({}).toArray();
       res.send(products);
@@ -49,15 +73,9 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const product = await DBCollection.findOne(query);
-      // console.log(product);
       res.send(product);
     });
-    app.get("/products/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const product = await DBCollection.findOne(query);
-      res.send(product);
-    });
+
     app.get("/category/:id", async (req, res) => {
       const selected = req.params.id;
       const query = { category: selected };
@@ -66,7 +84,6 @@ async function run() {
     });
     app.get("/users/:id", async (req, res) => {
       const email = req.params.id;
-      console.log('email :>> ', email);
       const query = { seller_email: email };
       const products = await DBCollection.find(query).toArray();
       res.send(products);
