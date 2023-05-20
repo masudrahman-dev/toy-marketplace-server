@@ -52,6 +52,18 @@ async function run() {
       // console.log(product);
       res.send(product);
     });
+    app.get("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const product = await DBCollection.findOne(query);
+      res.send(product);
+    });
+    app.get("/category/:id", async (req, res) => {
+      const selected = req.params.id;
+      const query = { category: selected };
+      const products = await DBCollection.find(query).toArray();
+      res.send(products);
+    });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
