@@ -70,7 +70,12 @@ async function run() {
       res.send(products);
     });
     app.get("/products/all_toys_table", async (req, res) => {
-      const products = await DBCollection.find({}).limit(20).toArray();
+      // const query = {};
+      let query = {};
+      if (req.query.product_name) {
+        query = { product_name: req.query.product_name };
+      }
+      const products = await DBCollection.find(query).toArray();
       res.send(products);
     });
     app.get("/products/:id", async (req, res) => {
