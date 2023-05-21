@@ -70,12 +70,11 @@ async function run() {
       res.send(products);
     });
     app.get("/products/all_toys_table", async (req, res) => {
-      // const query = {};
       let query = {};
       if (req.query.product_name) {
         query = { product_name: req.query.product_name };
       }
-      const products = await DBCollection.find(query).toArray();
+      const products = await DBCollection.find(query).limit(20).toArray();
       res.send(products);
     });
     app.get("/products/:id", async (req, res) => {
@@ -94,8 +93,21 @@ async function run() {
     app.get("/users/:id", async (req, res) => {
       const email = req.params.id;
       const query = { seller_email: email };
-      const products = await DBCollection.find(query).toArray();
-      res.send(products);
+
+      // console.log(req.query.sort_number);
+
+      let number = parseInt(req.query.sort_number);
+      if (number === 1) {
+        const products = await DBCollection.find(query)
+          .sort({ price: 1 })
+          .toArray();
+        res.send(products);
+      } else {
+        const products = await DBCollection.find(query)
+          .sort({ price: -1 })
+          .toArray();
+        res.send(products);
+      }
     });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
