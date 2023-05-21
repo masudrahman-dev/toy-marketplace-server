@@ -58,7 +58,7 @@ async function run() {
         const id = req.params.id;
         const query = { _id: new ObjectId(id) };
         const result = await DBCollection.deleteOne(query);
-        console.log(id);
+        console.log(result);
         res.send(result);
       } catch (error) {
         console.error(error);
@@ -67,6 +67,10 @@ async function run() {
     });
     app.get("/products", async (req, res) => {
       const products = await DBCollection.find({}).toArray();
+      res.send(products);
+    });
+    app.get("/products/all_toys_table", async (req, res) => {
+      const products = await DBCollection.find({}).limit(20).toArray();
       res.send(products);
     });
     app.get("/products/:id", async (req, res) => {
