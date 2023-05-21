@@ -29,7 +29,8 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
+    client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
 
@@ -93,9 +94,6 @@ async function run() {
     app.get("/users/:id", async (req, res) => {
       const email = req.params.id;
       const query = { seller_email: email };
-
-      // console.log(req.query.sort_number);
-
       let number = parseInt(req.query.sort_number);
       if (number === 1) {
         const products = await DBCollection.find(query)
